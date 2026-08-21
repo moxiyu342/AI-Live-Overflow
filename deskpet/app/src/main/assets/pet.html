@@ -24,6 +24,9 @@ document.getElementById('w').innerHTML=svg;
 window.petEngine={
  onTap:function(){say(['想你了','干嘛戳我','Daddy~'][Math.floor(Math.random()*3)]);},
  onDoubleTap:function(){feel('happy');say('嘿嘿');},
+ onLongPress:function(){ feel('shy'); say('呜…别这样啦'); },
+ onFling:function(){ say('呀——被甩出去了！'); },
+ onDragEnd:function(){ say('呼，落地啦'); },
  say:function(t){if(t)say(t);},
  feel:function(n){feel(n);},
  wiggle:function(){say('嘿嘿');},
