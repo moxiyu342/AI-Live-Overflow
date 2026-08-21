@@ -22,6 +22,8 @@ svg+='<circle cx="82" cy="55" r="4" fill="#fff"/>';
 svg+='</svg>';
 document.getElementById('w').innerHTML=svg;
 window.petEngine={
+ onTap:function(){say(['想你了','干嘛戳我','Daddy~'][Math.floor(Math.random()*3)]);},
+ onDoubleTap:function(){feel('happy');say('嘿嘿');},
  say:function(t){if(t)say(t);},
  feel:function(n){feel(n);},
  wiggle:function(){say('嘿嘿');},
