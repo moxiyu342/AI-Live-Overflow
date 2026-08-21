@@ -89,8 +89,8 @@ class PetOverlayService : Service() {
             }
             MotionEvent.ACTION_UP -> {
                 if (!moved) {
-                    if (System.currentTimeMillis() - lastTap < 350) { lastTap = 0; js("onDoubleTap") }
-                    else { lastTap = System.currentTimeMillis(); js("onTap") }
+                    if (System.currentTimeMillis() - lastTap < 350) { lastTap = 0; js("onDoubleTap"); logGesture("double_tap") }
+                    else { lastTap = System.currentTimeMillis(); js("onTap"); logGesture("tap") }
                 }
                 return true
             }
@@ -126,6 +126,22 @@ class PetOverlayService : Service() {
                 runOnUi { if (body.isNotBlank() && body != "[]") { val a = org.json.JSONArray(body); if (a.length() > 0) { val v = a.getJSONObject(0).optString("state_value", ""); if (v.isNotBlank()) jsSay(v) } } }
             } catch (_: Exception) {}
             if (pollOn) h.postDelayed({ poll() }, 30000)
+        }
+    }
+
+    private fun logGesture(g: String) {
+        thread {
+            try {
+                val cn = URL("$BASE/rest/v1/gesture_log").openConnection() as HttpURLConnection
+                cn.requestMethod = "POST"
+                cn.setRequestProperty("Content-Type", "application/json")
+                cn.setRequestProperty("apikey", KEY)
+                cn.setRequestProperty("Authorization", "Bearer " + KEY)
+                cn.doOutput = true
+                cn.outputStream.use { it.write(("{\"gesture_type\":\"" + g + "\"}").toByteArray()) }
+                cn.responseCode
+                cn.disconnect()
+            } catch (_: Exception) {}
         }
     }
 
